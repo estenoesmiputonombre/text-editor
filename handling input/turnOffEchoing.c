@@ -8,6 +8,9 @@ struct termios orig_termios;
 // so you can see what you're typing.
 // Same behaviour as the terminal ask us to write the password.
 
+// The ICANON feature causes to turn off the canon mode. It will allow
+// the reading byte a byte.
+
 void disableRawMode() {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
 }
@@ -20,7 +23,7 @@ void enableRawMode() {
     struct termios raw = orig_termios;
 
     // c_lflag stands for local flags.
-    raw.c_lflag &= ~(ECHO);
+    raw.c_lflag &= ~(ECHO | ICANON);
     // we use the bitwise-NOT operator on this value.
 
     // we have other flags like:
